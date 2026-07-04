@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:title="TrendScope"
+        app:titleTextColor="@android:color/white" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        app:tabIndicatorColor="@android:color/white"
+        app:tabSelectedTextColor="@android:color/white"
+        app:tabTextColor="#B0FFFFFF"
+        android:theme="@style/ThemeOverlay.MaterialComponents.Dark">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Categories" />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All News" />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bookmarks" />
+    </com.google.android.material.tabs.TabLayout>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/etSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Search articles..."
+        android:padding="12dp"
+        android:inputType="text"
+        android:imeOptions="actionSearch"
+        android:layout_margin="8dp"
+        android:background="@drawable/search_bg" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCategories"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:padding="8dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvArticles"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:clipToPadding="false"
+            android:padding="8dp" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="60dp"
+            android:visibility="gone"
+            android:textColor="#666"
+            android:textSize="14sp" />
+    </FrameLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_refresh"
+        app:backgroundTint="?attr/colorPrimary"
+        app:tint="@android:color/white" />
+
+</LinearLayout>

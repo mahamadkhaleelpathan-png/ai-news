@@ -1,0 +1,160 @@
+package com.trendscope.app.network
+
+import com.trendscope.app.data.Article
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserFactory
+import java.io.StringReader
+import java.text.SimpleDateFormat
+import java.util.*
+import java.util.concurrent.TimeUnit
+
+object RssParser {
+    private val client = OkHttpClient.Builder()
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .readTimeout(15, TimeUnit.SECONDS)
+        .followRedirects(true)
+        .build()
+
+    fun fetchAndParse(feedUrl: String, category: String, sourceName: String): List<Article> {
+        return try {
+            val request = Request.Builder().url(feedUrl).header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36").build()
+            val response = client.newCall(request).execute()
+            val xml = response.body?.string() ?: return emptyList()
+            parseRssXml(xml, category, sourceName)
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    private fun parseRssXml(xml: String, category: String, sourceName: String): List<Article> {
+        val articles = mutableListOf<Article>()
+        try {
+            val factory = XmlPullParserFactory.newInstance()
+            val parser = factory.newPullParser()
+            parser.setInput(StringReader(xml))
+
+            var eventType = parser.eventType
+            var title = ""
+            var link = ""
+            var description = ""
+            var pubDate = ""
+            var imageUrl = ""
+            var inItem = false
+            var currentTag = ""
+
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+                when (eventType) {
+                    XmlPullParser.START_TAG -> {
+                        currentTag = parser.name
+                        if (parser.name == "item" || parser.name == "entry") {
+                            inItem = true
+                            title = ""; link = ""; description = ""; pubDate = ""; imageUrl = ""
+                        }
+                    }
+                    XmlPullParser.TEXT -> {
+                        val text = parser.text?.trim() ?: ""
+                        when {
+                            inItem && currentTag == "title" && title.isEmpty() -> title = text
+                            inItem && currentTag == "link" && link.isEmpty() -> {
+                                val attrLink = parser.getAttributeValue(null, "href")
+                                link = attrLink ?: text
+                            }
+                            inItem && (currentTag == "description" || currentTag == "summary" || currentTag == "content") && description.isEmpty() -> {
+                                description = text
+                            }
+                            inItem && (currentTag == "pubDate" || currentTag == "published" || currentTag == "updated") && pubDate.isEmpty() -> {
+                                pubDate = text
+                            }
+                        }
+                    }
+                    XmlPullParser.END_TAG -> {
+                        if (parser.name == "item" || parser.name == "entry") {
+                            inItem = false
+                            if (link.isNotEmpty() && title.isNotEmpty()) {
+                                val imgUrl = extractImageUrl(description)
+                                val cleanDesc = description
+                                        .replace(Regex("<[^>]*>"), "")
+                                        .take(300)
+                                val formattedDate = formatDate(pubDate)
+                                articles.add(Article(
+                                    link = link,
+                                    title = title,
+                                    description = cleanDesc,
+                                    pubDate = formattedDate,
+                                    imageUrl = imgUrl,
+                                    source = sourceName,
+                                    category = category
+                                ))
+                            }
+                        }
+                    }
+                }
+                eventType = parser.next()
+            }
+        } catch (e: Exception) { }
+        return articles
+    }
+
+    private fun extractImageUrl(html: String): String {
+        val regex = Regex("""<img[^>]+src=["']([^"']+)["']""", RegexOption.IGNORE_CASE)
+        val match = regex.find(html)
+        if (match != null) {
+            var url = match.groupValues[1]
+            if (url.startsWith("//")) url = "https:$url"
+            return url
+        }
+        val mediaRegex = Regex("""<media:content[^>]+url=["']([^"']+)["']""", RegexOption.IGNORE_CASE)
+        val mediaMatch = mediaRegex.find(html)
+        return mediaMatch?.groupValues?.get(1) ?: ""
+    }
+
+    private fun formatDate(dateStr: String): String {
+        if (dateStr.isEmpty()) return ""
+        val patterns = listOf(
+            "EEE, dd MMM yyyy HH:mm:ss Z",
+            "EEE, dd MMM yyyy HH:mm:ss zzz",
+            "yyyy-MM-dd'T'HH:mm:ssXXX",
+            "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+            "yyyy-MM-dd'T'HH:mm:ssZ",
+            "yyyy-MM-dd'T'HH:mm:ss'Z'",
+            "yyyy-MM-dd HH:mm:ss",
+            "yyyy-MM-dd",
+            "EEE, dd MMM yyyy HH:mm:ss 'GMT'",
+        )
+        for (pattern in patterns) {
+            try {
+                val sdf = SimpleDateFormat(pattern, Locale.US)
+                sdf.timeZone = TimeZone.getTimeZone("UTC")
+                val date = sdf.parse(dateStr)
+                if (date != null) {
+                    val outSdf = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.US)
+                    return outSdf.format(date)
+                }
+            } catch (_: Exception) { }
+        }
+        val cleaned = dateStr.replace(Regex("\\s+"), " ").trim()
+        return cleaned.take(30)
+    }
+
+    private fun extractDomain(url: String): String {
+        return try {
+            val javaUrl = java.net.URL(url)
+            javaUrl.host.replace("www.", "")
+        } catch (e: Exception) {
+            url
+        }
+    }
+
+    fun fetchAllFeeds(onProgress: (String, String) -> Unit, onArticle: (Article) -> Unit) {
+        for ((category, urls) in DomainFeeds.FEEDS) {
+            for (url in urls) {
+                val sourceName = extractDomain(url)
+                onProgress(category, sourceName)
+                val articles = fetchAndParse(url, category, sourceName)
+                articles.forEach { onArticle(it) }
+            }
+        }
+    }
+}
