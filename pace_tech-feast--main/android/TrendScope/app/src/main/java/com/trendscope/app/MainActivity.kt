@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         setupTabs()
         setupCategoryGrid()
         loadCachedArticles()
+        binding.tabLayout.getTabAt(0)?.select()
 
         binding.fabRefresh.setOnClickListener { refreshAllFeeds() }
 
