@@ -1,6 +1,7 @@
 package com.trendscope.app
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -11,8 +12,8 @@ import com.trendscope.app.data.Article
 import com.trendscope.app.databinding.ActivityMainBinding
 import com.trendscope.app.network.DomainFeeds
 import com.trendscope.app.network.RssParser
+import com.trendscope.app.translate.TranslationManager
 import kotlinx.coroutines.*
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -20,6 +21,8 @@ class MainActivity : AppCompatActivity() {
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private var allArticles = mutableListOf<Article>()
     private var currentTab = 0
+    private var currentLang = ""
+    private lateinit var prefs: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +30,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         db = AppDatabase.getInstance(this)
+        prefs = getSharedPreferences("trendscope_prefs", MODE_PRIVATE)
+        currentLang = prefs.getString("selected_lang", "") ?: ""
 
         setupTabs()
         setupCategoryGrid()
@@ -38,6 +43,13 @@ class MainActivity : AppCompatActivity() {
         binding.etSearch.setOnEditorActionListener { _, _, _ ->
             searchArticles(binding.etSearch.text.toString())
             true
+        }
+
+        binding.toolbar.setOnMenuItemClickListener { item ->
+            if (item.itemId == R.id.action_language) {
+                showLanguageSelector()
+                true
+            } else false
         }
     }
 
@@ -62,6 +74,7 @@ class MainActivity : AppCompatActivity() {
         binding.rvCategories.adapter = CategoryAdapter(categories) { category ->
             val intent = Intent(this, CategoryActivity::class.java)
             intent.putExtra("category", category)
+            intent.putExtra("lang", currentLang)
             startActivity(intent)
         }
     }
@@ -81,7 +94,7 @@ class MainActivity : AppCompatActivity() {
             binding.rvArticles.visibility = android.view.View.VISIBLE
             binding.progressBar.visibility = android.view.View.GONE
             binding.tvStatus.visibility = android.view.View.GONE
-            showArticlesList(allArticles.sortedByDescending { it.fetchedAt })
+            showArticlesList(allArticles.sortedByDescending { it.pubDateMillis })
         }
     }
 
@@ -93,14 +106,14 @@ class MainActivity : AppCompatActivity() {
             binding.progressBar.visibility = android.view.View.GONE
             binding.tvStatus.visibility = android.view.View.GONE
             if (bookmarks.isEmpty()) {
-                Toast.makeText(this@MainActivity, "No bookmarks yet", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, getString(R.string.no_bookmarks), Toast.LENGTH_SHORT).show()
             }
             showArticlesList(bookmarks)
         }
     }
 
     private fun showArticlesList(articles: List<Article>) {
-        binding.rvArticles.adapter = ArticleAdapter(articles) { article ->
+        binding.rvArticles.adapter = ArticleAdapter(articles, { article ->
             val intent = Intent(this, ArticleActivity::class.java)
             intent.putExtra("link", article.link)
             intent.putExtra("title", article.title)
@@ -110,13 +123,14 @@ class MainActivity : AppCompatActivity() {
             intent.putExtra("imageUrl", article.imageUrl)
             intent.putExtra("source", article.source)
             intent.putExtra("category", article.category)
+            intent.putExtra("lang", currentLang)
             startActivity(intent)
-        }
+        }, currentLang)
     }
 
     private fun refreshAllFeeds() {
         binding.progressBar.visibility = android.view.View.VISIBLE
-        binding.tvStatus.text = "Starting..."
+        binding.tvStatus.text = getString(R.string.status_starting)
         binding.tvStatus.visibility = android.view.View.VISIBLE
         allArticles.clear()
 
@@ -125,7 +139,7 @@ class MainActivity : AppCompatActivity() {
                 RssParser.fetchAllFeeds(
                     onProgress = { category, source ->
                         launch(Dispatchers.Main) {
-                            binding.tvStatus.text = "Fetching $category - $source..."
+                            binding.tvStatus.text = "${getString(R.string.status_fetching)} $category - $source..."
                         }
                     },
                     onArticle = { article ->
@@ -140,8 +154,8 @@ class MainActivity : AppCompatActivity() {
             binding.tvStatus.visibility = android.view.View.GONE
             binding.rvCategories.visibility = android.view.View.GONE
             binding.rvArticles.visibility = android.view.View.VISIBLE
-            showArticlesList(allArticles.sortedByDescending { it.fetchedAt })
-            Toast.makeText(this@MainActivity, "Loaded ${allArticles.size} articles", Toast.LENGTH_SHORT).show()
+            showArticlesList(allArticles.sortedByDescending { it.pubDateMillis })
+            Toast.makeText(this@MainActivity, getString(R.string.loading_articles, allArticles.size), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -166,6 +180,104 @@ class MainActivity : AppCompatActivity() {
             binding.rvCategories.visibility = android.view.View.GONE
             binding.rvArticles.visibility = android.view.View.VISIBLE
             showArticlesList(results)
+        }
+    }
+
+    private fun showLanguageSelector() {
+        val languages = TranslationManager.getSupportedLanguages()
+        val items = languages.map { TranslationManager.getDisplayName(it) + " (" + TranslationManager.getEnglishName(it) + ")" }.toTypedArray()
+
+        android.app.AlertDialog.Builder(this)
+            .setTitle(getString(R.string.select_language))
+            .setItems(items) { _, which ->
+                val code = languages[which]
+                setLanguage(code)
+            }
+            .setNegativeButton("English") { _, _ -> setLanguage("") }
+            .show()
+    }
+
+    private fun setLanguage(code: String) {
+        currentLang = code
+        prefs.edit().putString("selected_lang", code).apply()
+        if (code.isNotEmpty()) {
+            translateAllArticles(code)
+        } else {
+            refreshCurrentView()
+        }
+    }
+
+    private fun translateAllArticles(targetLang: String) {
+        binding.progressBar.visibility = android.view.View.VISIBLE
+        binding.tvStatus.text = getString(R.string.status_downloading_model)
+        binding.tvStatus.visibility = android.view.View.VISIBLE
+
+        TranslationManager.downloadModel(targetLang,
+            onSuccess = {
+                binding.tvStatus.text = getString(R.string.status_translating)
+                scope.launch {
+                    val toTranslate = withContext(Dispatchers.IO) {
+                        db.articleDao().getArticlesNotInLang(targetLang)
+                    }
+                    translateBatch(toTranslate, targetLang)
+                }
+            },
+            onFailure = { e ->
+                binding.progressBar.visibility = android.view.View.GONE
+                binding.tvStatus.visibility = android.view.View.GONE
+                Toast.makeText(this, "Download failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    private fun translateBatch(articles: List<Article>, targetLang: String) {
+        scope.launch {
+            var count = 0
+            val total = articles.size
+            for (article in articles) {
+                count++
+                val statusText = getString(R.string.status_translating_count, count, total)
+                launch(Dispatchers.Main) { binding.tvStatus.text = statusText }
+                TranslationManager.translate(article.title, targetLang,
+                    onResult = { translatedTitle ->
+                        TranslationManager.translate(article.description, targetLang,
+                            onResult = { translatedDesc ->
+                                TranslationManager.translate(article.content.ifEmpty { article.description }, targetLang,
+                                    onResult = { translatedContent ->
+                                        scope.launch {
+                                            withContext(Dispatchers.IO) {
+                                                db.articleDao().updateTranslation(
+                                                    article.link, translatedTitle, translatedDesc, translatedContent, targetLang
+                                                )
+                                            }
+                                        }
+                                    },
+                                    onError = {}
+                                )
+                            },
+                            onError = {}
+                        )
+                    },
+                    onError = {}
+                )
+            }
+            delay(2000)
+            refreshCurrentView()
+            binding.progressBar.visibility = android.view.View.GONE
+            binding.tvStatus.visibility = android.view.View.GONE
+            Toast.makeText(this@MainActivity, getString(R.string.translation_complete), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun refreshCurrentView() {
+        scope.launch {
+            val articles = withContext(Dispatchers.IO) { db.articleDao().getAllArticles() }
+            allArticles.clear()
+            allArticles.addAll(articles)
+            when (currentTab) {
+                1 -> showArticlesList(allArticles.sortedByDescending { it.pubDateMillis })
+                2 -> showBookmarks()
+            }
         }
     }
 

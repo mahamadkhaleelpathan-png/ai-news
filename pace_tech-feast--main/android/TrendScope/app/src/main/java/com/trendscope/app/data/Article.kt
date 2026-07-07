@@ -14,5 +14,10 @@ data class Article(
     val source: String,
     val category: String,
     val isBookmarked: Boolean = false,
-    val fetchedAt: Long = System.currentTimeMillis()
+    val fetchedAt: Long = System.currentTimeMillis(),
+    val pubDateMillis: Long = 0L,
+    val translatedTitle: String = "",
+    val translatedDescription: String = "",
+    val translatedContent: String = "",
+    val translateLang: String = ""
 )

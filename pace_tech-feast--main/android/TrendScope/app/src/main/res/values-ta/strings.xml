@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ட்ரெண்ட்ஸ்கோப்</string>
+    <string name="tab_categories">வகைகள்</string>
+    <string name="tab_all_news">அனைத்து செய்திகள்</string>
+    <string name="tab_bookmarks">புக்மார்க்குகள்</string>
+    <string name="search_hint">கட்டுரைகளைத் தேடுங்கள்…</string>
+    <string name="today">இன்று</string>
+    <string name="yesterday">நேற்று</string>
+    <string name="this_week">இந்த வாரம்</string>
+    <string name="this_month">இந்த மாதம்</string>
+    <string name="earlier">முன்பு</string>
+    <string name="open_original">அசல் கட்டுரையைத் திற</string>
+    <string name="no_bookmarks">இதுவரை புக்மார்க்குகள் இல்லை</string>
+    <string name="bookmarked">புக்மார்க் செய்யப்பட்டது</string>
+    <string name="removed_bookmark">புக்மார்க் அகற்றப்பட்டது</string>
+    <string name="select_language">மொழியைத் தேர்ந்தெடுக்கவும்</string>
+    <string name="language">மொழி</string>
+    <string name="status_starting">தொடங்குகிறது…</string>
+    <string name="status_fetching">பெறுகிறது</string>
+    <string name="status_downloading_model">மொழி மாதிரி பதிவிறக்கப்படுகிறது…</string>
+    <string name="status_translating">கட்டுரைகள் மொழிபெயர்க்கப்படுகின்றன…</string>
+    <string name="status_translating_count">மொழிபெயர்க்கிறது (%1$d/%2$d)…</string>
+    <string name="translation_complete">மொழிபெயர்ப்பு முடிந்தது!</string>
+    <string name="loading_articles">%1$d கட்டுரைகள் ஏற்றப்பட்டன</string>
+</resources>

@@ -78,6 +78,7 @@ object RssParser {
                                         .replace(Regex("<[^>]*>"), "")
                                         .take(300)
                                 val formattedDate = formatDate(pubDate)
+                                val dateMillis = parseDateToMillis(pubDate)
                                 articles.add(Article(
                                     link = link,
                                     title = title,
@@ -85,7 +86,8 @@ object RssParser {
                                     pubDate = formattedDate,
                                     imageUrl = imgUrl,
                                     source = sourceName,
-                                    category = category
+                                    category = category,
+                                    pubDateMillis = dateMillis
                                 ))
                             }
                         }
@@ -136,6 +138,30 @@ object RssParser {
         }
         val cleaned = dateStr.replace(Regex("\\s+"), " ").trim()
         return cleaned.take(30)
+    }
+
+    fun parseDateToMillis(dateStr: String): Long {
+        if (dateStr.isEmpty()) return System.currentTimeMillis()
+        val patterns = listOf(
+            "EEE, dd MMM yyyy HH:mm:ss Z",
+            "EEE, dd MMM yyyy HH:mm:ss zzz",
+            "yyyy-MM-dd'T'HH:mm:ssXXX",
+            "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+            "yyyy-MM-dd'T'HH:mm:ssZ",
+            "yyyy-MM-dd'T'HH:mm:ss'Z'",
+            "yyyy-MM-dd HH:mm:ss",
+            "yyyy-MM-dd",
+            "EEE, dd MMM yyyy HH:mm:ss 'GMT'",
+        )
+        for (pattern in patterns) {
+            try {
+                val sdf = SimpleDateFormat(pattern, Locale.US)
+                sdf.timeZone = TimeZone.getTimeZone("UTC")
+                val date = sdf.parse(dateStr)
+                if (date != null) return date.time
+            } catch (_: Exception) { }
+        }
+        return System.currentTimeMillis()
     }
 
     private fun extractDomain(url: String): String {

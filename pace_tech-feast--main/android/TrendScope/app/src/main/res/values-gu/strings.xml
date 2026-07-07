@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ટ્રેન્ડસ્કોપ</string>
+    <string name="tab_categories">શ્રેણીઓ</string>
+    <string name="tab_all_news">બધા સમાચાર</string>
+    <string name="tab_bookmarks">બુકમાર્ક્સ</string>
+    <string name="search_hint">લેખો શોધો…</string>
+    <string name="today">આજે</string>
+    <string name="yesterday">ગઈકાલે</string>
+    <string name="this_week">આ અઠવાડિયે</string>
+    <string name="this_month">આ મહિને</string>
+    <string name="earlier">પહેલાં</string>
+    <string name="open_original">મૂળ લેખ ખોલો</string>
+    <string name="no_bookmarks">હજી સુધી કોઈ બુકમાર્ક નથી</string>
+    <string name="bookmarked">બુકમાર્ક કર્યું</string>
+    <string name="removed_bookmark">બુકમાર્ક દૂર કર્યું</string>
+    <string name="select_language">ભાષા પસંદ કરો</string>
+    <string name="language">ભાષા</string>
+    <string name="status_starting">શરૂ થાય છે…</string>
+    <string name="status_fetching">લાવવામાં આવે છે</string>
+    <string name="status_downloading_model">ભાષા મોડેલ ડાઉનલોડ થાય છે…</string>
+    <string name="status_translating">લેખોનો અનુવાદ થાય છે…</string>
+    <string name="status_translating_count">અનુવાદ કરે છે (%1$d/%2$d)…</string>
+    <string name="translation_complete">અનુવાદ પૂર્ણ!</string>
+    <string name="loading_articles">%1$d લેખો લોડ થયા</string>
+</resources>

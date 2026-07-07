@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ट्रेंडस्कोप</string>
+    <string name="tab_categories">श्रेण्या</string>
+    <string name="tab_all_news">सर्व बातम्या</string>
+    <string name="tab_bookmarks">बुकमार्क</string>
+    <string name="search_hint">लेख शोधा…</string>
+    <string name="today">आज</string>
+    <string name="yesterday">काल</string>
+    <string name="this_week">या आठवड्यात</string>
+    <string name="this_month">या महिन्यात</string>
+    <string name="earlier">पूर्वी</string>
+    <string name="open_original">मूळ लेख उघडा</string>
+    <string name="no_bookmarks">अद्याप बुकमार्क नाहीत</string>
+    <string name="bookmarked">बुकमार्क केले</string>
+    <string name="removed_bookmark">बुकमार्क काढले</string>
+    <string name="select_language">भाषा निवडा</string>
+    <string name="language">भाषा</string>
+    <string name="status_starting">सुरू होत आहे…</string>
+    <string name="status_fetching">आणले जात आहे</string>
+    <string name="status_downloading_model">भाषा मॉडेल डाउनलोड होत आहे…</string>
+    <string name="status_translating">लेखांचे भाषांतर होत आहे…</string>
+    <string name="status_translating_count">भाषांतर करत आहे (%1$d/%2$d)…</string>
+    <string name="translation_complete">भाषांतर पूर्ण!</string>
+    <string name="loading_articles">%1$d लेख लोड झाले</string>
+</resources>

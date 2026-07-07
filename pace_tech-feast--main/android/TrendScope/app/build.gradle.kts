@@ -13,8 +13,8 @@ android {
         applicationId = "com.trendscope.app"
         minSdk = 26
         targetSdk = 34
-        versionCode = 2
-        versionName = "2.0.0"
+        versionCode = 3
+        versionName = "3.0.0"
     }
 
     signingConfigs {
@@ -83,4 +83,7 @@ dependencies {
 
     // Coil for image loading
     implementation("io.coil-kt:coil:2.5.0")
+
+    // ML Kit Translate for on-device translation
+    implementation("com.google.mlkit:translate:17.0.2")
 }

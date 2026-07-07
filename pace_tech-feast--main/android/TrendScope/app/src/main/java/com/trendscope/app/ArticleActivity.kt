@@ -6,12 +6,12 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Html
 import android.view.View
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.trendscope.app.data.AppDatabase
 import com.trendscope.app.data.Article
 import com.trendscope.app.databinding.ActivityArticleBinding
+import com.trendscope.app.translate.TranslationManager
 import kotlinx.coroutines.*
 
 class ArticleActivity : AppCompatActivity() {
@@ -20,12 +20,14 @@ class ArticleActivity : AppCompatActivity() {
     private lateinit var article: Article
     private val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     private var isBookmarked = false
+    private var currentLang = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityArticleBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        currentLang = intent.getStringExtra("lang") ?: ""
         article = Article(
             link = intent.getStringExtra("link") ?: return,
             title = intent.getStringExtra("title") ?: "",
@@ -58,6 +60,10 @@ class ArticleActivity : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(article.link))
             startActivity(intent)
         }
+
+        if (currentLang.isNotEmpty()) {
+            loadTranslatedContent()
+        }
     }
 
     private fun displayArticle() {
@@ -85,6 +91,22 @@ class ArticleActivity : AppCompatActivity() {
         }
     }
 
+    private fun loadTranslatedContent() {
+        scope.launch {
+            val dbArticle = withContext(Dispatchers.IO) {
+                db.articleDao().getAllArticles().find { it.link == article.link }
+            }
+            if (dbArticle != null && dbArticle.translateLang == currentLang) {
+                if (dbArticle.translatedTitle.isNotEmpty()) {
+                    binding.tvArticleTitle.text = dbArticle.translatedTitle
+                }
+                if (dbArticle.translatedDescription.isNotEmpty()) {
+                    binding.tvArticleContent.text = dbArticle.translatedDescription
+                }
+            }
+        }
+    }
+
     private fun checkBookmarkStatus() {
         scope.launch {
             isBookmarked = withContext(Dispatchers.IO) {
@@ -102,7 +124,7 @@ class ArticleActivity : AppCompatActivity() {
             isBookmarked = !isBookmarked
             updateBookmarkIcon()
             Toast.makeText(this@ArticleActivity,
-                if (isBookmarked) "Bookmarked" else "Removed bookmark",
+                if (isBookmarked) getString(R.string.bookmarked) else getString(R.string.removed_bookmark),
                 Toast.LENGTH_SHORT).show()
         }
     }

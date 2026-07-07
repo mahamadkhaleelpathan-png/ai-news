@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ট্রেন্ডস্কোপ</string>
+    <string name="tab_categories">বিভাগ</string>
+    <string name="tab_all_news">সব খবর</string>
+    <string name="tab_bookmarks">বুকমার্ক</string>
+    <string name="search_hint">নিবন্ধ অনুসন্ধান…</string>
+    <string name="today">আজ</string>
+    <string name="yesterday">গতকাল</string>
+    <string name="this_week">এই সপ্তাহ</string>
+    <string name="this_month">এই মাস</string>
+    <string name="earlier">আগে</string>
+    <string name="open_original">মূল নিবন্ধ খুলুন</string>
+    <string name="no_bookmarks">এখনো কোনো বুকমার্ক নেই</string>
+    <string name="bookmarked">বুকমার্ক করা হয়েছে</string>
+    <string name="removed_bookmark">বুকমার্ক সরানো হয়েছে</string>
+    <string name="select_language">ভাষা নির্বাচন</string>
+    <string name="language">ভাষা</string>
+    <string name="status_starting">শুরু হচ্ছে…</string>
+    <string name="status_fetching">আনা হচ্ছে</string>
+    <string name="status_downloading_model">ভাষা মডেল ডাউনলোড হচ্ছে…</string>
+    <string name="status_translating">নিবন্ধ অনুবাদ করা হচ্ছে…</string>
+    <string name="status_translating_count">অনুবাদ করা হচ্ছে (%1$d/%2$d)…</string>
+    <string name="translation_complete">অনুবাদ সম্পূর্ণ!</string>
+    <string name="loading_articles">%1$dটি নিবন্ধ লোড হয়েছে</string>
+</resources>

@@ -10,8 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:title="TrendScope"
-        app:titleTextColor="@android:color/white" />
+        app:title="@string/app_name"
+        app:titleTextColor="@android:color/white"
+        app:menu="@menu/main_menu" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
@@ -26,22 +27,22 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Categories" />
+            android:text="@string/tab_categories" />
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="All News" />
+            android:text="@string/tab_all_news" />
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Bookmarks" />
+            android:text="@string/tab_bookmarks" />
     </com.google.android.material.tabs.TabLayout>
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/etSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Search articles..."
+        android:hint="@string/search_hint"
         android:padding="12dp"
         android:inputType="text"
         android:imeOptions="actionSearch"

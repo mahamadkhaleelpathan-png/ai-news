@@ -4,16 +4,16 @@ import androidx.room.*
 
 @Dao
 interface ArticleDao {
-    @Query("SELECT * FROM articles WHERE isBookmarked = 1 ORDER BY fetchedAt DESC")
+    @Query("SELECT * FROM articles WHERE isBookmarked = 1 ORDER BY pubDateMillis DESC")
     suspend fun getBookmarks(): List<Article>
 
-    @Query("SELECT * FROM articles WHERE category = :category ORDER BY fetchedAt DESC")
+    @Query("SELECT * FROM articles WHERE category = :category ORDER BY pubDateMillis DESC")
     suspend fun getArticlesByCategory(category: String): List<Article>
 
-    @Query("SELECT * FROM articles ORDER BY fetchedAt DESC")
+    @Query("SELECT * FROM articles ORDER BY pubDateMillis DESC")
     suspend fun getAllArticles(): List<Article>
 
-    @Query("SELECT * FROM articles WHERE title LIKE '%' || :query || '%' OR description LIKE '%' || :query || '%' ORDER BY fetchedAt DESC")
+    @Query("SELECT * FROM articles WHERE title LIKE '%' || :query || '%' OR description LIKE '%' || :query || '%' OR translatedTitle LIKE '%' || :query || '%' OR translatedDescription LIKE '%' || :query || '%' ORDER BY pubDateMillis DESC")
     suspend fun searchArticles(query: String): List<Article>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -39,4 +39,13 @@ interface ArticleDao {
 
     @Query("SELECT COUNT(*) FROM articles")
     suspend fun getCount(): Int
+
+    @Query("UPDATE articles SET translatedTitle = :title, translatedDescription = :desc, translatedContent = :content, translateLang = :lang WHERE link = :link")
+    suspend fun updateTranslation(link: String, title: String, desc: String, content: String, lang: String)
+
+    @Query("SELECT * FROM articles WHERE translateLang != :lang OR translateLang IS NULL ORDER BY pubDateMillis DESC")
+    suspend fun getArticlesNotInLang(lang: String): List<Article>
+
+    @Query("SELECT * FROM articles ORDER BY pubDateMillis DESC")
+    suspend fun getAllArticlesUnlimited(): List<Article>
 }

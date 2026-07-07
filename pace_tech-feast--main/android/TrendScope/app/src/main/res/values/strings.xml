@@ -1,4 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">TrendScope</string>
+    <string name="tab_categories">Categories</string>
+    <string name="tab_all_news">All News</string>
+    <string name="tab_bookmarks">Bookmarks</string>
+    <string name="search_hint">Search articles…</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="this_week">This Week</string>
+    <string name="this_month">This Month</string>
+    <string name="earlier">Earlier</string>
+    <string name="open_original">Open original article</string>
+    <string name="no_bookmarks">No bookmarks yet</string>
+    <string name="bookmarked">Bookmarked</string>
+    <string name="removed_bookmark">Removed bookmark</string>
+    <string name="select_language">Select Language</string>
+    <string name="language">Language</string>
+    <string name="status_starting">Starting…</string>
+    <string name="status_fetching">Fetching</string>
+    <string name="status_downloading_model">Downloading language model…</string>
+    <string name="status_translating">Translating articles…</string>
+    <string name="status_translating_count">Translating (%1$d/%2$d)…</string>
+    <string name="translation_complete">Translation complete!</string>
+    <string name="loading_articles">Loaded %1$d articles</string>
 </resources>

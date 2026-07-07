@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ట్రెండ్స్కోప్</string>
+    <string name="tab_categories">వర్గాలు</string>
+    <string name="tab_all_news">అన్ని వార్తలు</string>
+    <string name="tab_bookmarks">బుక్‌మార్క్‌లు</string>
+    <string name="search_hint">వ్యాసాలు వెతకండి…</string>
+    <string name="today">ఈరోజు</string>
+    <string name="yesterday">నిన్న</string>
+    <string name="this_week">ఈ వారం</string>
+    <string name="this_month">ఈ నెల</string>
+    <string name="earlier">ముందు</string>
+    <string name="open_original">అసలు వ్యాసం తెరవండి</string>
+    <string name="no_bookmarks">ఇంకా బుక్‌మార్క్‌లు లేవు</string>
+    <string name="bookmarked">బుక్‌మార్క్ చేయబడింది</string>
+    <string name="removed_bookmark">బుక్‌మార్క్ తీసివేయబడింది</string>
+    <string name="select_language">భాషను ఎంచుకోండి</string>
+    <string name="language">భాష</string>
+    <string name="status_starting">ప్రారంభమవుతోంది…</string>
+    <string name="status_fetching">తీసుకువస్తోంది</string>
+    <string name="status_downloading_model">భాష మోడల్ డౌన్‌లోడ్ అవుతోంది…</string>
+    <string name="status_translating">వ్యాసాలు అనువదించబడుతున్నాయి…</string>
+    <string name="status_translating_count">అనువదిస్తోంది (%1$d/%2$d)…</string>
+    <string name="translation_complete">అనువాదం పూర్తి!</string>
+    <string name="loading_articles">%1$d వ్యాసాలు లోడ్ అయ్యాయి</string>
+</resources>

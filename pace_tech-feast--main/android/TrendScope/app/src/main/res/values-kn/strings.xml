@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ಟ್ರೆಂಡ್ಸ್ಕೋಪ್</string>
+    <string name="tab_categories">ವರ್ಗಗಳು</string>
+    <string name="tab_all_news">ಎಲ್ಲಾ ಸುದ್ದಿ</string>
+    <string name="tab_bookmarks">ಬುಕ್ಮಾರ್ಕ್‌ಗಳು</string>
+    <string name="search_hint">ಲೇಖನಗಳನ್ನು ಹುಡುಕಿ…</string>
+    <string name="today">ಇಂದು</string>
+    <string name="yesterday">ನಿನ್ನೆ</string>
+    <string name="this_week">ಈ ವಾರ</string>
+    <string name="this_month">ಈ ತಿಂಗಳು</string>
+    <string name="earlier">ಹಿಂದೆ</string>
+    <string name="open_original">ಮೂಲ ಲೇಖನ ತೆರೆಯಿರಿ</string>
+    <string name="no_bookmarks">ಇನ್ನೂ ಬುಕ್ಮಾರ್ಕ್‌ಗಳಿಲ್ಲ</string>
+    <string name="bookmarked">ಬುಕ್ಮಾರ್ಕ್ ಮಾಡಲಾಗಿದೆ</string>
+    <string name="removed_bookmark">ಬುಕ್ಮಾರ್ಕ್ ತೆಗೆದುಹಾಕಲಾಗಿದೆ</string>
+    <string name="select_language">ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ</string>
+    <string name="language">ಭಾಷೆ</string>
+    <string name="status_starting">ಪ್ರಾರಂಭವಾಗುತ್ತಿದೆ…</string>
+    <string name="status_fetching">ತರಲಾಗುತ್ತಿದೆ</string>
+    <string name="status_downloading_model">ಭಾಷಾ ಮಾದರಿ ಡೌನ್‌ಲೋಡ್ ಆಗುತ್ತಿದೆ…</string>
+    <string name="status_translating">ಲೇಖನಗಳನ್ನು ಅನುವಾದಿಸಲಾಗುತ್ತಿದೆ…</string>
+    <string name="status_translating_count">ಅನುವಾದಿಸಲಾಗುತ್ತಿದೆ (%1$d/%2$d)…</string>
+    <string name="translation_complete">ಅನುವಾದ ಪೂರ್ಣ!</string>
+    <string name="loading_articles">%1$d ಲೇಖನಗಳು ಲೋಡ್ ಆಗಿವೆ</string>
+</resources>
