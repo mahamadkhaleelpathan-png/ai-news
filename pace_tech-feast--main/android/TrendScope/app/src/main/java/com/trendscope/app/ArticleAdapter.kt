@@ -41,6 +41,7 @@ class ArticleAdapter(
         if (article.imageUrl.isNotEmpty()) {
             try {
                 val target = holder.ivImage
+                target.visibility = View.VISIBLE
                 val url = article.imageUrl
                 Thread {
                     try {

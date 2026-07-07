@@ -23,6 +23,9 @@ android {
             storePassword = "TrendScope2024"
             keyAlias = "trendscope"
             keyPassword = "TrendScope2024"
+            enableV1Signing = true
+            enableV2Signing = true
+            enableV3Signing = true
         }
     }
 

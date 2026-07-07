@@ -13,21 +13,85 @@
         app:titleTextColor="@android:color/white"
         app:navigationIcon="@drawable/ic_arrow_back" />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvArticleTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#222"
+                android:lineSpacingExtra="4dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:id="@+id/tvArticleSource"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textSize="13sp"
+                    android:textColor="#1a73e8" />
+
+                <TextView
+                    android:id="@+id/tvArticleDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    android:textColor="#999" />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/ivArticleImage"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="12dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                android:adjustViewBounds="true" />
+
+            <TextView
+                android:id="@+id/tvArticleContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textSize="16sp"
+                android:textColor="#444"
+                android:lineSpacingExtra="6dp" />
+
+            <TextView
+                android:id="@+id/tvOpenOriginal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Open original article"
+                android:textColor="#1a73e8"
+                android:textSize="14sp"
+                android:padding="8dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+        </LinearLayout>
+    </ScrollView>
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <WebView
-            android:id="@+id/webView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center"
-            android:visibility="gone" />
+        android:layout_height="wrap_content">
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabBookmark"
@@ -50,6 +114,5 @@
             app:backgroundTint="?attr/colorPrimary"
             app:tint="@android:color/white"
             app:fabSize="mini" />
-
     </FrameLayout>
 </LinearLayout>

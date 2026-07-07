@@ -104,7 +104,12 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ArticleActivity::class.java)
             intent.putExtra("link", article.link)
             intent.putExtra("title", article.title)
+            intent.putExtra("description", article.description)
+            intent.putExtra("content", article.content)
+            intent.putExtra("pubDate", article.pubDate)
+            intent.putExtra("imageUrl", article.imageUrl)
             intent.putExtra("source", article.source)
+            intent.putExtra("category", article.category)
             startActivity(intent)
         }
     }
