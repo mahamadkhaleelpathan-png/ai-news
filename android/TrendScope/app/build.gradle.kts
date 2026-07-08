@@ -12,7 +12,7 @@ android {
     defaultConfig {
         applicationId = "com.trendscope.app"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 34
         versionCode = 3
         versionName = "3.1.0"
         buildConfigField("String", "GNEWS_API_KEY", "\"${project.findProperty("gnewsApiKey") ?: ""}\"")
