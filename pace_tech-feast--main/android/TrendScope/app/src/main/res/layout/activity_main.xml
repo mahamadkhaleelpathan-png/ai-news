@@ -31,12 +31,24 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tab_all_news" />
+            android:text="@string/tab_bookmarks" />
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tab_bookmarks" />
+            android:text="@string/tab_offline" />
     </com.google.android.material.tabs.TabLayout>
+
+    <TextView
+        android:id="@+id/tvOfflineBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/offline_banner"
+        android:textColor="@android:color/white"
+        android:background="#d32f2f"
+        android:textSize="13sp"
+        android:visibility="gone" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/etSearch"
@@ -48,6 +60,14 @@
         android:imeOptions="actionSearch"
         android:layout_margin="8dp"
         android:background="@drawable/search_bg" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvFilterChips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:layout_marginHorizontal="4dp" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -69,6 +89,34 @@
             android:clipToPadding="false"
             android:padding="8dp" />
 
+        <LinearLayout
+            android:id="@+id/layoutError"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:padding="32dp">
+
+            <TextView
+                android:id="@+id/tvErrorMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="#d32f2f"
+                android:gravity="center"
+                android:layout_marginBottom="16dp" />
+
+            <Button
+                android:id="@+id/btnRetry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/retry"
+                android:textAllCaps="false"
+                android:backgroundTint="?attr/colorPrimary"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="48dp"
@@ -86,6 +134,16 @@
             android:textColor="#666"
             android:textSize="14sp" />
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvLastUpdated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="11sp"
+        android:textColor="#999"
+        android:padding="4dp"
+        android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabRefresh"

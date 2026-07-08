@@ -15,14 +15,16 @@ android {
         targetSdk = 34
         versionCode = 3
         versionName = "3.0.0"
+        buildConfigField("String", "GNEWS_API_KEY", "\"${project.findProperty("gnewsApiKey") ?: ""}\"")
+        buildConfigField("String", "NEWSAPI_KEY", "\"${project.findProperty("newsapiKey") ?: ""}\"")
     }
 
     signingConfigs {
         create("release") {
-            storeFile = file("release.keystore")
-            storePassword = "TrendScope2024"
-            keyAlias = "trendscope"
-            keyPassword = "TrendScope2024"
+            storeFile = file(System.getenv("KEYSTORE_PATH") ?: "release.keystore")
+            storePassword = System.getenv("KEYSTORE_STORE_PASSWORD") ?: project.findProperty("keystoreStorePassword") as? String ?: ""
+            keyAlias = System.getenv("KEYSTORE_KEY_ALIAS") ?: "trendscope"
+            keyPassword = System.getenv("KEYSTORE_KEY_PASSWORD") ?: project.findProperty("keystoreKeyPassword") as? String ?: ""
             enableV1Signing = true
             enableV2Signing = true
             enableV3Signing = true
@@ -45,6 +47,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -84,6 +87,4 @@ dependencies {
     // Coil for image loading
     implementation("io.coil-kt:coil:2.5.0")
 
-    // ML Kit Translate for on-device translation
-    implementation("com.google.mlkit:translate:17.0.2")
 }

@@ -1,5 +1,6 @@
 package com.trendscope.app.network
 
+import android.util.Log
 import com.trendscope.app.data.Article
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -11,9 +12,10 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 object RssParser {
+    private const val TAG = "RssParser"
     private val client = OkHttpClient.Builder()
-        .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(15, TimeUnit.SECONDS)
+        .connectTimeout(8, TimeUnit.SECONDS)
+        .readTimeout(10, TimeUnit.SECONDS)
         .followRedirects(true)
         .build()
 
@@ -21,9 +23,20 @@ object RssParser {
         return try {
             val request = Request.Builder().url(feedUrl).header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36").build()
             val response = client.newCall(request).execute()
-            val xml = response.body?.string() ?: return emptyList()
-            parseRssXml(xml, category, sourceName)
+            if (!response.isSuccessful) {
+                Log.w(TAG, "HTTP ${response.code} for $feedUrl")
+                return emptyList()
+            }
+            val xml = response.body?.string()
+            if (xml.isNullOrEmpty()) {
+                Log.w(TAG, "Empty body from $feedUrl")
+                return emptyList()
+            }
+            val articles = parseRssXml(xml, category, sourceName)
+            Log.d(TAG, "$sourceName: ${articles.size} articles")
+            articles
         } catch (e: Exception) {
+            Log.e(TAG, "Failed to fetch $feedUrl", e)
             emptyList()
         }
     }
@@ -40,7 +53,7 @@ object RssParser {
             var link = ""
             var description = ""
             var pubDate = ""
-            var imageUrl = ""
+            var author = ""
             var inItem = false
             var currentTag = ""
 
@@ -50,7 +63,13 @@ object RssParser {
                         currentTag = parser.name
                         if (parser.name == "item" || parser.name == "entry") {
                             inItem = true
-                            title = ""; link = ""; description = ""; pubDate = ""; imageUrl = ""
+                            title = ""; link = ""; description = ""; pubDate = ""; author = ""
+                        }
+                        if (inItem && (currentTag == "link")) {
+                            val href = parser.getAttributeValue(null, "href")
+                            if (href != null && link.isEmpty()) {
+                                link = href
+                            }
                         }
                     }
                     XmlPullParser.TEXT -> {
@@ -59,13 +78,18 @@ object RssParser {
                             inItem && currentTag == "title" && title.isEmpty() -> title = text
                             inItem && currentTag == "link" && link.isEmpty() -> {
                                 val attrLink = parser.getAttributeValue(null, "href")
-                                link = attrLink ?: text
+                                if (link.isEmpty()) {
+                                    link = attrLink ?: text
+                                }
                             }
                             inItem && (currentTag == "description" || currentTag == "summary" || currentTag == "content") && description.isEmpty() -> {
                                 description = text
                             }
                             inItem && (currentTag == "pubDate" || currentTag == "published" || currentTag == "updated") && pubDate.isEmpty() -> {
                                 pubDate = text
+                            }
+                            inItem && (currentTag == "author" || currentTag == "dc:creator" || currentTag == "creator") && author.isEmpty() -> {
+                                author = text
                             }
                         }
                     }
@@ -75,8 +99,8 @@ object RssParser {
                             if (link.isNotEmpty() && title.isNotEmpty()) {
                                 val imgUrl = extractImageUrl(description)
                                 val cleanDesc = description
-                                        .replace(Regex("<[^>]*>"), "")
-                                        .take(300)
+                                    .replace(Regex("<[^>]*>"), "")
+                                    .take(300)
                                 val formattedDate = formatDate(pubDate)
                                 val dateMillis = parseDateToMillis(pubDate)
                                 articles.add(Article(
@@ -87,15 +111,23 @@ object RssParser {
                                     imageUrl = imgUrl,
                                     source = sourceName,
                                     category = category,
+                                    author = author,
                                     pubDateMillis = dateMillis
                                 ))
+                            } else if (title.isNotEmpty() && link.isEmpty()) {
+                                Log.w(TAG, "$sourceName: skipped article '$title' - no link")
                             }
                         }
                     }
                 }
                 eventType = parser.next()
             }
-        } catch (e: Exception) { }
+        } catch (e: Exception) {
+            Log.e(TAG, "parseRssXml failed for $sourceName", e)
+        }
+        if (articles.isEmpty()) {
+            Log.w(TAG, "$sourceName: 0 articles parsed from ${xml.length} bytes")
+        }
         return articles
     }
 

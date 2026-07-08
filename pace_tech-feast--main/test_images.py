@@ -1,6 +1,9 @@
+import os
 import requests
 
-api_key = "063ddb9cdc89f579a86c0423bcdc1eb9"
+api_key = os.environ.get("GNEWS_API_KEY", "")
+if not api_key:
+    raise ValueError("GNEWS_API_KEY environment variable not set")
 url = "https://gnews.io/api/v4/search"
 
 params = {

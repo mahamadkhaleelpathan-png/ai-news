@@ -13,6 +13,59 @@
         app:titleTextColor="@android:color/white"
         app:navigationIcon="@drawable/ic_arrow_back" />
 
+    <LinearLayout
+        android:id="@+id/translateBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="6dp"
+        android:background="#eef3ff">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/translate_to_label"
+            android:textSize="14sp"
+            android:textColor="#333"
+            android:layout_marginEnd="8dp" />
+
+        <Spinner
+            android:id="@+id/langSpinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/btnTranslateArticle"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="@string/translate"
+            android:textAllCaps="false"
+            android:textSize="13sp"
+            android:backgroundTint="?attr/colorPrimary"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:textColor="#d32f2f"
+        android:textSize="13sp"
+        android:background="#fff4f2"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -100,6 +153,17 @@
             android:layout_gravity="bottom|start"
             android:layout_margin="16dp"
             android:src="@android:drawable/btn_star_big_off"
+            app:backgroundTint="?attr/colorPrimary"
+            app:tint="@android:color/white"
+            app:fabSize="mini" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabDownload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_download"
             app:backgroundTint="?attr/colorPrimary"
             app:tint="@android:color/white"
             app:fabSize="mini" />

@@ -1,6 +1,9 @@
+import os
 import requests
 
-api_key = "pub_299c7c8b33bf4ced85cb1bb3540ce410"
+api_key = os.environ.get("NEWSDATA_API_KEY", "")
+if not api_key:
+    raise ValueError("NEWSDATA_API_KEY environment variable not set")
 url = "https://newsdata.io/api/1/news"
 
 # Test WITHOUT date filter first

@@ -9,14 +9,24 @@
         android:translateY="22">
         <path
             android:fillColor="#C8A96A"
-            android:pathData="M32,0C49.67,0 64,14.33 64,32C64,49.67 49.67,64 32,64C14.33,64 0,49.67 0,32C0,14.33 14.33,0 32,0Z" />
+            android:pathData="M12,10L20,10L20,12L12,12Z" />
         <path
-            android:fillColor="#FFFFFF"
-            android:pathData="M16,40L22,28L28,40M36,40L36,24L42,32L48,24L48,40" />
+            android:fillColor="#C8A96A"
+            android:pathData="M12,18L32,18L32,20L12,20Z" />
         <path
-            android:fillColor="#FFFFFF"
-            android:strokeColor="#FFFFFF"
-            android:strokeWidth="2"
-            android:pathData="M16,44L48,44" />
+            android:fillColor="#C8A96A"
+            android:pathData="M12,26L44,26L44,28L12,28Z" />
+        <path
+            android:fillColor="#C8A96A"
+            android:pathData="M12,34L38,34L38,36L12,36Z" />
+        <path
+            android:fillColor="#C8A96A"
+            android:pathData="M12,42L48,42L48,44L12,44Z" />
+        <path
+            android:fillColor="#C8A96A"
+            android:pathData="M44,28L44,20L48,20L48,28Z" />
+        <path
+            android:fillColor="#C8A96A"
+            android:pathData="M44,28L52,20L56,24L48,32Z" />
     </group>
 </vector>

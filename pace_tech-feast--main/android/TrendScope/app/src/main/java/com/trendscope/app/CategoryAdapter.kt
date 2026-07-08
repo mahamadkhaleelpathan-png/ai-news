@@ -4,9 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
+import com.trendscope.app.network.DomainFeeds
 
 class CategoryAdapter(
     private val categories: List<String>,
@@ -24,6 +24,7 @@ class CategoryAdapter(
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val card: MaterialCardView = view.findViewById(R.id.cardCategory)
         val text: TextView = view.findViewById(R.id.tvCategoryName)
+        val emoji: TextView = view.findViewById(R.id.tvCategoryEmoji)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -34,6 +35,8 @@ class CategoryAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val category = categories[position]
+        val emoji = DomainFeeds.getCategoryEmoji(category)
+        holder.emoji.text = emoji
         holder.text.text = category
         holder.card.setCardBackgroundColor(
             android.graphics.Color.parseColor(colors[position % colors.size])
