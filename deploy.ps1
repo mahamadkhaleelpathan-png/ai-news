@@ -44,7 +44,8 @@ if ($RebuildApk) {
     Write-Host "`nRebuilding APK with new URL..." -ForegroundColor Yellow
     $androidDir = "$base\android\TrendScope"
     Set-Location $androidDir
-    $env:JAVA_HOME = "C:\Program Files\Amazon Corretto\jdk17.0.19_10"
+    # Ensure JAVA_HOME is set before building
+    if (-not $env:JAVA_HOME) { throw "JAVA_HOME environment variable is required for Android builds" }
     & "$androidDir\gradlew.bat" assembleDebug --no-daemon -x test
     if ($LASTEXITCODE -eq 0) {
         Write-Host "APK rebuilt successfully!" -ForegroundColor Green

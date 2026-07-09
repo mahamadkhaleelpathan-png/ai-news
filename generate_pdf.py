@@ -308,7 +308,7 @@ minSdk:       26
 versionCode:  3
 versionName:  3.0.0
 Java:         JDK 17
-Signing:      release.keystore (PASSWORD_REMOVED)
+Signing:      release.keystore
 ProGuard:     minifyEnabled = true
 View Binding: enabled""", "build.gradle.kts Summary")
 

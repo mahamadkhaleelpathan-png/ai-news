@@ -1,5 +1,5 @@
 @echo off
-cd /d "PROJECT_ROOT"
+cd /d "%~dp0"
 start /B "" ".venv\Scripts\python.exe" app.py
 timeout /t 5 /nobreak >nul
 start /B "" "%TEMP%\cloudflared.exe" tunnel --url http://localhost:5000 > "%cd%\tun3.log" 2>&1

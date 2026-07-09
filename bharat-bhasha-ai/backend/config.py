@@ -4,11 +4,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
-    SECRET_KEY = os.getenv("SECRET_KEY", "CHANGE_ME_SECRET_KEY")
+    SECRET_KEY = os.environ["SECRET_KEY"]
     DATABASE_URI = os.getenv("DATABASE_URI", "sqlite:///bhasha.db")
     UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), "uploads")
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB
-    JWT_SECRET = os.getenv("JWT_SECRET", "CHANGE_ME_JWT_SECRET")
+    JWT_SECRET = os.environ["JWT_SECRET"]
     JWT_EXPIRY_HOURS = 24
     ALLOWED_EXTENSIONS = {"pdf", "docx", "txt", "png", "jpg", "jpeg", "wav", "mp3", "ogg"}
     SUPPORTED_LANGUAGES = {
